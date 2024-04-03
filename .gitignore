@@ -1,0 +1,28 @@
+# Eclipse
+.metadata
+.classpath
+.project
+.settings
+.factorypath
+.checkstyle
+.externalToolBuilders
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea
+
+# Netbeans
+nb-configuration.xml
+/**/nbproject/
+
+# Build
+/**/target/
+/**/bin/
+test-output
+
+# Misc.
+.DS_Store
+lsp
+pgadmin-data

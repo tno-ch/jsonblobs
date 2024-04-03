@@ -1,0 +1,12 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "localhost docker",
+      "Group": "Servers",
+      "Host": "jsonblobs-db",
+      "Port": 5432,
+      "Username": "jsonblobs",
+      "MaintenanceDB": "jsonblobs"
+    }
+  }
+}

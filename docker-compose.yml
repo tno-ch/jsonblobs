@@ -1,0 +1,69 @@
+#
+# Copyright TNO Geologische Dienst Nederland
+#
+# Alle rechten voorbehouden.
+# Niets uit deze software mag worden vermenigvuldigd en/of openbaar gemaakt door middel van druk, fotokopie,
+# microfilm of op welke andere wijze dan ook, zonder voorafgaande toestemming van TNO.
+#
+# Indien deze software in opdracht werd uitgebracht, wordt voor de rechten en verplichtingen van opdrachtgever
+# en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
+# terzake tussen de partijen gesloten overeenkomst.
+#
+version: '3.9'
+
+services:
+  jsonblobs-db:
+    image: postgis/postgis:15-3.3
+    restart: always
+    container_name: jsonblobs-postgresql
+    environment:
+      - PGUSER=jsonblobs
+      - POSTGRES_USER=jsonblobs
+      - POSTGRES_PASSWORD=jsonblobs
+      - POSTGRES_DB=jsonblobs
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+  jsonblobs-pgAdmin4:
+    image: dpage/pgadmin4:8.2
+    container_name: jsonblobs-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=test@tno.nl
+      - PGADMIN_DEFAULT_PASSWORD=xxx
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/servers.json
+    ports:
+      - '5454:80'
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
+      - ./postgres-servers.json:/pgadmin4/servers.json
+    depends_on:
+      - jsonblobs-db
+  jsonblobs-mongodb:
+    image: mongo:latest
+    container_name: jsonblobs-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodbdata:/data/db
+  mongo-express:
+    image: mongo-express
+    container_name: jsonblobs-mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_URL=mongodb://root:example@jsonblobs-mongodb:27017/?authSource=admin
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    links:
+      - jsonblobs-mongodb
+    restart: unless-stopped
+    ports:
+      - "18081:8081"
+
+volumes:
+  postgres-volume:
+  mongodbdata:
