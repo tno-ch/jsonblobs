@@ -11,48 +11,5 @@
 # terzake tussen de partijen gesloten overeenkomst.
 #
 
-len=$#
-if [ $len -ne 1 ]; then
-  echo "Missing arguments: at least one argument needed ./docker-compose.sh <profiles> e.g. ./docker-compose.sh gmn,gmw,gld"
-  echo "  Possible arguments: frd, gar, gld, gmn, gmw, all or comma-separated multiple profiles"
-  exit
-fi
-
-profile_definitions=(
-  "frd"
-  "gar"
-  "gld"
-  "gmn"
-  "gmw"
-  )
-
-IFS=',' read -ra profiles <<< "$1"
-profileString=""
-for profile in "${profiles[@]}"
-do
-
-  if [ $profile == "all" ]; then
-
-    echo "Found profile all. Starting up all containers"
-    for profile in "${profile_definitions[@]}"
-    do
-      profileString="${profileString} --profile ${profile}"
-    done
-    break;
-
-  else
-
-    regexValue="\<${profile}\>"
-    if [[ ${profile_definitions[@]} =~ ${regexValue} ]]
-    then
-      profileString="${profileString} --profile ${profile}"
-    else
-      echo "ERROR: Profile '${profile}' does not exist. Valid profiles: [${profile_definitions[@]}]"
-      exit
-    fi
-  fi
-
-done
-
-echo "Executing command: docker compose ${profileString} up --build"
-docker compose ${profileString} up --build
+echo "Executing command: docker compose up --build"
+docker compose up --build
