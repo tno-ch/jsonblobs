@@ -9,7 +9,7 @@
  * en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
  * terzake tussen de partijen gesloten overeenkomst.
  */
-package org.example;
+package org.example.jsonb;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityJson implements Serializable {
+public class EntityJsonb implements Serializable {
 
     private String stringProp;
 

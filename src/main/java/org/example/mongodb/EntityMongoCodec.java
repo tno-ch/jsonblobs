@@ -9,7 +9,7 @@
  * en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
  * terzake tussen de partijen gesloten overeenkomst.
  */
-package org.example;
+package org.example.mongodb;
 
 import java.util.UUID;
 
@@ -24,30 +24,30 @@ import org.bson.codecs.CollectibleCodec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 
-public class FruitCodec implements CollectibleCodec<Fruit> {
+public class EntityMongoCodec implements CollectibleCodec<EntityMongo> {
 
     private final Codec<Document> documentCodec;
 
-    public FruitCodec() {
+    public EntityMongoCodec() {
         this.documentCodec = MongoClientSettings.getDefaultCodecRegistry().get( Document.class );
     }
 
     @Override
-    public void encode(BsonWriter writer, Fruit fruit, EncoderContext encoderContext) {
+    public void encode(BsonWriter writer, EntityMongo entityMongo, EncoderContext encoderContext) {
         Document doc = new Document();
-        doc.put( "name", fruit.getName() );
-        doc.put( "description", fruit.getDescription() );
-        doc.put( "registrationObjectDbk", fruit.getRegistrationObjectDbk() );
+        doc.put( "name", entityMongo.getName() );
+        doc.put( "payload", entityMongo.getPayload() );
+        doc.put( "registrationObjectDbk", entityMongo.getRegistrationObjectDbk() );
         documentCodec.encode( writer, doc, encoderContext );
     }
 
     @Override
-    public Class<Fruit> getEncoderClass() {
-        return Fruit.class;
+    public Class<EntityMongo> getEncoderClass() {
+        return EntityMongo.class;
     }
 
     @Override
-    public Fruit generateIdIfAbsentFromDocument(Fruit document) {
+    public EntityMongo generateIdIfAbsentFromDocument(EntityMongo document) {
         if ( !documentHasId( document ) ) {
             document.setId( UUID.randomUUID().toString() );
         }
@@ -55,26 +55,26 @@ public class FruitCodec implements CollectibleCodec<Fruit> {
     }
 
     @Override
-    public boolean documentHasId(Fruit document) {
+    public boolean documentHasId(EntityMongo document) {
         return document.getId() != null;
     }
 
     @Override
-    public BsonValue getDocumentId(Fruit document) {
+    public BsonValue getDocumentId(EntityMongo document) {
         return new BsonString( document.getId() );
     }
 
     @Override
-    public Fruit decode(BsonReader reader, DecoderContext decoderContext) {
+    public EntityMongo decode(BsonReader reader, DecoderContext decoderContext) {
         Document document = documentCodec.decode( reader, decoderContext );
-        Fruit fruit = new Fruit();
+        EntityMongo entityMongo = new EntityMongo();
         if ( document.getObjectId( "_id" ) != null ) {
-            fruit.setId( document.getObjectId( "_id" ).toString() );
+            entityMongo.setId( document.getObjectId( "_id" ).toString() );
         }
-        fruit.setName( document.getString( "name" ) );
-        fruit.setDescription( document.getString( "description" ) );
-        fruit.setRegistrationObjectDbk( document.getInteger( "registrationObjectDbk" ) );
-        return fruit;
+        entityMongo.setName( document.getString( "name" ) );
+        entityMongo.setPayload( document.getString( "payload" ) );
+        entityMongo.setRegistrationObjectDbk( document.getInteger( "registrationObjectDbk" ) );
+        return entityMongo;
     }
 
 }

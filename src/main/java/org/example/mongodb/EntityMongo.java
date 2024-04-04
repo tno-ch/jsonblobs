@@ -9,19 +9,29 @@
  * en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
  * terzake tussen de partijen gesloten overeenkomst.
  */
-package org.example;
+package org.example.mongodb;
 
-import org.bson.codecs.Codec;
-import org.bson.codecs.configuration.CodecProvider;
-import org.bson.codecs.configuration.CodecRegistry;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-public class FruitCodecProvider implements CodecProvider {
-    @Override
-    public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
-        if ( clazz.equals( Fruit.class ) ) {
-            return (Codec<T>) new FruitCodec();
-        }
-        return null;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public class EntityMongo {
+
+    private String id;
+    private String name;
+    private String payload;
+    private int registrationObjectDbk;
+
+    public EntityMongo(String name, String payload) {
+        this.name = name;
+        this.payload = payload;
     }
 
 }

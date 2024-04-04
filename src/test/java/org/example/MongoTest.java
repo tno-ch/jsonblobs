@@ -11,6 +11,8 @@
  */
 package org.example;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -20,16 +22,21 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.example.mongodb.EntityMongo;
+import org.example.mongodb.EntityMongoCodecService;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
 @Slf4j
 public class MongoTest {
 
-    public static final int MAX = 300;
+    public static final int MAX = 100;
+
+    //CHECKSTYLE:OFF
     @Inject
-    FruitCodecService service;
+    EntityMongoCodecService service;
     //https://www.mongodb.com/developer/products/mongodb/mongodb-network-compression/
+    //CHECKSTYLE:ON
 
     @Test
     public void testAllJson() throws IOException {
@@ -55,7 +62,11 @@ public class MongoTest {
 
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
-            service.add( Fruit.builder().name( type.name() + "-" + i ).description( json ).registrationObjectDbk( i ).build() );
+            service.add( EntityMongo.builder()
+                                    .name( type.name() + "-" + i )
+                                    .payload( json )
+                                    .registrationObjectDbk( i )
+                                    .build() );
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
         long avg = total / max;
@@ -66,8 +77,9 @@ public class MongoTest {
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
             String name = type.name() + "-" + i;
-            Fruit byName = service.findByName( name );
-            //System.out.println(name + " => " + byName.getId());
+            EntityMongo byName = service.findByName( name );
+            assertThat( byName ).isNotNull();
+            assertThat( byName.getPayload() ).isNotNull();
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
         long avg = total / max;

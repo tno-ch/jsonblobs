@@ -26,6 +26,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.example.jsonb.EntityJsonb;
+import org.example.jsonb.EntityValueJsonb;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
@@ -69,13 +71,14 @@ public class PostgresqlTest {
 
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
-            EntityValue entityValue = EntityValue.builder()
-                                                 .id( type.name() + "-" + i )
-                                                 .payload( EntityJson.builder()
-                                                                     .stringProp( json )
-                                                                     .build() )
-                                                 .build();
-            em.persist( entityValue );
+            EntityValueJsonb entityValueJsonb = EntityValueJsonb.builder()
+                                                                .id( type.name() + "-" + i )
+                                                                .payload( EntityJsonb.builder()
+                                                                      .stringProp( json )
+                                                                      .build() )
+                                                                .registrationObjectDbk( i )
+                                                                .build();
+            em.persist( entityValueJsonb );
             em.flush();
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
@@ -86,9 +89,9 @@ public class PostgresqlTest {
     private void read(int max, Type type) {
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
-            EntityValue entityValue = em.find( EntityValue.class, type.name() + "-" + i );
-            assertThat( entityValue ).isNotNull();
-            assertThat( entityValue.getPayload().getStringProp() ).isNotNull();
+            EntityValueJsonb entityValueJsonb = em.find( EntityValueJsonb.class, type.name() + "-" + i );
+            assertThat( entityValueJsonb ).isNotNull();
+            assertThat( entityValueJsonb.getPayload().getStringProp() ).isNotNull();
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
         BigDecimal avg = new BigDecimal( total ).divide( new BigDecimal( max ), 3, RoundingMode.HALF_UP );

@@ -9,7 +9,7 @@
  * en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
  * terzake tussen de partijen gesloten overeenkomst.
  */
-package org.example;
+package org.example.jsonb;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,17 +23,19 @@ import org.hibernate.type.SqlTypes;
 
 //NEED to have at least 1 entity
 @Entity
-@Table( name = "entity_value" )
+@Table( name = "entity_value_jsonb" )
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityValue {
+public class EntityValueJsonb {
 
     @Id
     private String id;
 
     @JdbcTypeCode( SqlTypes.JSON)
-    private EntityJson payload;
+    private EntityJsonb payload;
+
+    private int registrationObjectDbk;
 
 }

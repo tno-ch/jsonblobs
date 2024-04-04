@@ -9,7 +9,7 @@
  * en opdrachtnemer verwezen naar de Algemene Voorwaarden voor opdrachten aan TNO, dan wel de betreffende
  * terzake tussen de partijen gesloten overeenkomst.
  */
-package org.example;
+package org.example.mongodb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,14 @@ import org.bson.Document;
 
 @ApplicationScoped
 @Slf4j
-public class FruitCodecService {
+public class EntityMongoCodecService {
 
-    //@Inject
+    //CHECKSTYLE:OFF
     MongoClient mongoClient;
+    //CHECKSTYLE:ON
 
     @Inject
-    public FruitCodecService(MongoClient mongoClient) {
+    public EntityMongoCodecService(MongoClient mongoClient) {
         this.mongoClient = mongoClient;
 
         if ( !hasIndex( "name" ) ) {
@@ -45,9 +46,9 @@ public class FruitCodecService {
         }
     }
 
-    public List<Fruit> list() {
-        List<Fruit> list = new ArrayList<>();
-        try (MongoCursor<Fruit> cursor = getCollection().find().iterator()) {
+    public List<EntityMongo> list() {
+        List<EntityMongo> list = new ArrayList<>();
+        try (MongoCursor<EntityMongo> cursor = getCollection().find().iterator()) {
             while ( cursor.hasNext() ) {
                 list.add( cursor.next() );
             }
@@ -56,18 +57,18 @@ public class FruitCodecService {
         return list;
     }
 
-    public void add(Fruit fruit) {
-        getCollection().insertOne( fruit );
+    public void add(EntityMongo entityMongo) {
+        getCollection().insertOne( entityMongo );
     }
 
-    public Fruit findByName(String name) {
+    public EntityMongo findByName(String name) {
         Document searchQuery = new Document();
         searchQuery.put( "name", name );
 
-        FindIterable<Fruit> fruits = getCollection().find( searchQuery );
+        FindIterable<EntityMongo> entities = getCollection().find( searchQuery );
 
-        Fruit found = null;
-        try (MongoCursor<Fruit> cursorIterator = fruits.cursor()) {
+        EntityMongo found = null;
+        try (MongoCursor<EntityMongo> cursorIterator = entities.cursor()) {
             while ( cursorIterator.hasNext() ) {
                 found = cursorIterator.next();
                 break;
@@ -77,8 +78,9 @@ public class FruitCodecService {
         return found;
     }
 
-    private MongoCollection<Fruit> getCollection() {
-        MongoCollection<Fruit> collection = mongoClient.getDatabase( "fruit" ).getCollection( "fruit", Fruit.class );
+    private MongoCollection<EntityMongo> getCollection() {
+        MongoCollection<EntityMongo> collection = mongoClient.getDatabase( "jsonblobs" )
+                                                             .getCollection( "jsonblobs", EntityMongo.class );
         return collection;
     }
 
