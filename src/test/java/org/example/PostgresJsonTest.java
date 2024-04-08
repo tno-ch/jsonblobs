@@ -26,13 +26,13 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.example.jsonb.EntityJsonb;
-import org.example.jsonb.EntityValueJsonb;
+import org.example.json.EntityJson;
+import org.example.json.EntityValueJson;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
 @Slf4j
-public class PostgresqlTest {
+public class PostgresJsonTest {
 
     @PersistenceContext
     private EntityManager em;
@@ -71,14 +71,14 @@ public class PostgresqlTest {
 
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
-            EntityValueJsonb entityValueJsonb = EntityValueJsonb.builder()
-                                                                .id( type.name() + "-" + i )
-                                                                .payload( EntityJsonb.builder()
-                                                                      .stringProp( json )
-                                                                      .build() )
-                                                                .registrationObjectDbk( i )
-                                                                .build();
-            em.persist( entityValueJsonb );
+            EntityValueJson entityValueJson = EntityValueJson.builder()
+                                                             .id( type.name() + "-" + i )
+                                                             .payload( EntityJson.builder()
+                                                                                 .stringProp( json )
+                                                                                 .build() )
+                                                             .registrationObjectDbk( i )
+                                                             .build();
+            em.persist( entityValueJson );
             em.flush();
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
@@ -89,9 +89,9 @@ public class PostgresqlTest {
     private void read(int max, Type type) {
         Instant start = Instant.now();
         for ( int i = 0; i < max; i++ ) {
-            EntityValueJsonb entityValueJsonb = em.find( EntityValueJsonb.class, type.name() + "-" + i );
-            assertThat( entityValueJsonb ).isNotNull();
-            assertThat( entityValueJsonb.getPayload().getStringProp() ).isNotNull();
+            EntityValueJson entityValueJson = em.find( EntityValueJson.class, type.name() + "-" + i );
+            assertThat( entityValueJson ).isNotNull();
+            assertThat( entityValueJson.getPayload().getStringProp() ).isNotNull();
         }
         long total = Duration.between( start, Instant.now() ).toMillis();
         BigDecimal avg = new BigDecimal( total ).divide( new BigDecimal( max ), 3, RoundingMode.HALF_UP );
