@@ -63,7 +63,18 @@ services:
     restart: unless-stopped
     ports:
       - "18081:8081"
+  #oracle-express:
+  #  image: container-registry.oracle.com/database/express:21.3.0-xe
+  #  container_name: oracle-express
+  #  environment:
+  #    - ORACLE_PWD=admin
+  #    - ORACLE_CHARACTERSET=UTF-8
+  #  ports:
+  #    - '1521:1521'
+  #  volumes:
+  #    - oradata:/opt/oracle/oradata
 
 volumes:
   postgres-volume:
   mongodbdata:
+  #oradata:
