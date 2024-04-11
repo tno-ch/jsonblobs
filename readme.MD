@@ -15,24 +15,28 @@ after running some tests, the results are gathered in this excelsheet: timings_j
 
 ### 2.2 Postgresql with JsonB (running inside local docker)
 * boot up local docker images
+* execute the org/example/jsonb/create_table.sql
 * run org.example.PostgresJsonbTest
 
 database client available under: http://localhost:5454
 
 ### 2.3 Postgresql with Json (running inside local docker)
 * boot up local docker images
+* execute the org/example/json/create_table.sql
 * run org.example.PostgresJsonTest
 
 database client available under: http://localhost:5454
 
 ### 2.4 Postgresql with Json and lz4 compression (running inside local docker)
 * boot up local docker images
+* execute the org/example/json_lz4/create_table.sql
 * run org.example.PostgresJsonLz4Test
 
 database client available under: http://localhost:5454
 
 ### 2.5 Postgresql with bytea and lz4 compression (running inside local docker)
 * boot up local docker images
+* execute the org/example/bytea_lz4/create_table.sql
 * run org.example.PostgresByteaLz4Test
 
 database client available under: http://localhost:5454
