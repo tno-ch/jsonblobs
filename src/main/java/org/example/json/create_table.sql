@@ -1,3 +1,4 @@
+drop table IF EXISTS entity_value_json;
 create table entity_value_json
 (
     id       varchar(255) primary key,

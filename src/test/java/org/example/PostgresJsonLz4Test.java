@@ -46,6 +46,10 @@ public class PostgresJsonLz4Test {
         String jsonMedium = IOUtils.toString( this.getClass().getResourceAsStream( "/data_medium.json" ), StandardCharsets.UTF_8 ); // 7.642 kb op file - 15.6MB in mongo
         String jsonLarge = IOUtils.toString( this.getClass().getResourceAsStream( "/data_large.json" ), StandardCharsets.UTF_8 );   //12.472 kb op file - 25.5MB in mongo
 
+        em.createQuery( "delete from EntityValueJsonLz4" ).executeUpdate();
+        em.flush();
+        log.info( "Truncate table: EntityValueJsonLz4" );
+
         Instant start = Instant.now();
         insert( jsonSmall, MAX, Type.SMALL );
         insert( jsonMedium, MAX, Type.MEDIUM );

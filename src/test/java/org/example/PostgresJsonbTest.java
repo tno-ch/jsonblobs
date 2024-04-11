@@ -46,14 +46,15 @@ public class PostgresJsonbTest {
         String jsonMedium = IOUtils.toString( this.getClass().getResourceAsStream( "/data_medium.json" ), StandardCharsets.UTF_8 ); // 7.642 kb op file - 15.6MB in mongo
         String jsonLarge = IOUtils.toString( this.getClass().getResourceAsStream( "/data_large.json" ), StandardCharsets.UTF_8 );   //12.472 kb op file - 25.5MB in mongo
 
+        em.createQuery( "delete from EntityValueJsonb" ).executeUpdate();
+        em.flush();
+        log.info( "Truncate table: EntityValueJsonb" );
+
         Instant start = Instant.now();
         insert( jsonSmall, MAX, Type.SMALL );
         insert( jsonMedium, MAX, Type.MEDIUM );
         insert( jsonLarge, MAX, Type.LARGE );
         log.info( "Finished inserting total: {}ms", Duration.between( start, Instant.now() ).toMillis() );
-        //start = Instant.now();
-        //em.flush();
-        //log.info( "Flushing: {}ms", Duration.between( start, Instant.now() ).toMillis() );
 
         start = Instant.now();
         em.clear();
