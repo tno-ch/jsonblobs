@@ -5,6 +5,7 @@ after running some tests, the results are gathered in this excelsheet: timings_j
 ## 2. Setting up the tests
 
 ### 2.1 Oracle (running from an openshift pod to oracle dev database)
+* change the user, password and url in the application.properties to the oracle database
 * login to openshift with: `oc login` and `winpty oc exec -it -n bro-lv-dev bhrgt-app-validation-v2-1-5c455b4f4d-rds99 -- bash`
 * create tar file and copy tar file over to a docker container in openshift
 
