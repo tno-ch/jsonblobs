@@ -1,5 +1,10 @@
+## 1. Results
 
-# Oracle (running from an openshift pod to oracle dev database)
+after running some tests, the results are gathered in this excelsheet: timings_jsonblobs.xlsx
+
+## 2. Setting up the tests
+
+### 2.1 Oracle (running from an openshift pod to oracle dev database)
 * login to openshift with: `oc login` and `winpty oc exec -it -n bro-lv-dev bhrgt-app-validation-v2-1-5c455b4f4d-rds99 -- bash`
 * create tar file and copy tar file over to a docker container in openshift
 
@@ -8,31 +13,31 @@
 
 `tar xf jsonblobs.tar && cd jsonblobs && mvn -Dtest=org.example.OracleJsonTest test`
 
-# Postgresql with JsonB (running inside local docker)
+### 2.2 Postgresql with JsonB (running inside local docker)
 * boot up local docker images
 * run org.example.PostgresJsonbTest
 
 database client available under: http://localhost:5454
 
-# Postgresql with Json (running inside local docker)
+### 2.3 Postgresql with Json (running inside local docker)
 * boot up local docker images
 * run org.example.PostgresJsonTest
 
 database client available under: http://localhost:5454
 
-# Postgresql with Json and lz4 compression (running inside local docker)
+### 2.4 Postgresql with Json and lz4 compression (running inside local docker)
 * boot up local docker images
 * run org.example.PostgresJsonLz4Test
 
 database client available under: http://localhost:5454
 
-# Postgresql with bytea and lz4 compression (running inside local docker)
+### 2.5 Postgresql with bytea and lz4 compression (running inside local docker)
 * boot up local docker images
-* run org.example.PostgresByeaLz4Test
+* run org.example.PostgresByteaLz4Test
 
 database client available under: http://localhost:5454
 
-# MongoDB (running inside local docker)
+### 2.6 MongoDB (running inside local docker)
 * boot up local docker images
 * run org.example.MongoTest
 
