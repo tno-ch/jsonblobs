@@ -20,6 +20,18 @@ database client available under: http://localhost:5454
 
 database client available under: http://localhost:5454
 
+# Postgresql with Json and lz4 compression (running inside local docker)
+* boot up local docker images
+* run org.example.PostgresJsonLz4Test
+
+database client available under: http://localhost:5454
+
+# Postgresql with bytea and lz4 compression (running inside local docker)
+* boot up local docker images
+* run org.example.PostgresByeaLz4Test
+
+database client available under: http://localhost:5454
+
 # MongoDB (running inside local docker)
 * boot up local docker images
 * run org.example.MongoTest
